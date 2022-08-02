@@ -89,7 +89,13 @@ instance MonadError SchemaError m => FromObjectKey m RedeemVerificationKey where
 instance ToJSONKey RedeemVerificationKey where
   toJSONKey = ToJSONKeyText render (A.key . render)
     where
+      render :: RedeemVerificationKey -> A.Key
       render = A.fromText . sformat redeemVKB64UrlF
+  toJSONKeyList = ToJSONKeyText render (A.key . render)
+    where
+      render :: [RedeemVerificationKey] -> A.Key
+      render = map (A.fromText . sformat redeemVKB64UrlF)
+      
 
 instance FromJSONKey RedeemVerificationKey where
   fromJSONKey =
